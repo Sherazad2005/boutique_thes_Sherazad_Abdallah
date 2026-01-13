@@ -9,31 +9,40 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class ProduitController {
 
-    private final ProduitService service ;
+    private final ProduitService service;
 
     public ProduitController(ProduitService service) {
         this.service = service;
     }
 
+    // GET / : affiche la liste des produits
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("produits", service.findAll());
         return "index";
     }
 
+
     @GetMapping("/nouveau")
     public String nouveau(Model model) {
-        model.addAttribute("produits", service.findAll());
-        return "nouveau";
+        model.addAttribute("produit", new Produit());
+        return "formulaire-produit";
     }
 
-    @GetMapping("/enregistrer")
+
+    @PostMapping("/enregistrer")
     public String enregistrer(@ModelAttribute Produit produit) {
         service.save(produit);
         return "redirect:/";
     }
 
     @GetMapping("/modifier/{id}")
+    public String modifierForm(@PathVariable Long id, Model model) {
+        model.addAttribute("produit", service.getById(id));
+        return "formulaire-produit";
+    }
+
+    @PostMapping("/modifier/{id}")
     public String modifier(@PathVariable Long id, @ModelAttribute Produit produit) {
         produit.setId(id);
         service.save(produit);
@@ -45,7 +54,5 @@ public class ProduitController {
         service.delete(id);
         return "redirect:/";
     }
-
-
-
 }
+
