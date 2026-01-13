@@ -3,51 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulaire produit</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+<div class="container">
+    <div class="card">
 
-<h1 th:text="${produit.id == null ? 'Ajouter un thé' : 'Modifier le thé'}"></h1>
+        <h1 th:text="${produit.id == null ? 'Ajouter un thé' : 'Modifier le thé'}"></h1>
 
-<form th:action="${produit.id == null} ? @{/enregistrer} : @{/modifier/{id}(id=${produit.id})}"
-      th:object="${produit}" method="post">
+        <form th:action="${produit.id == null} ? @{/enregistrer} : @{/modifier/{id}(id=${produit.id})}"
+              th:object="${produit}" method="post">
 
-    <label>Nom</label>
-    <input type="text" th:field="*{nom}" required maxlength="100">
-    <br><br>
+            <div class="form-grid">
 
-    <label>Origine</label>
-    <select th:field="*{origine}" required>
-        <option value="">-- Choisir --</option>
-        <option value="Chine">Chine</option>
-        <option value="Japon">Japon</option>
-        <option value="Inde">Inde</option>
-        <option value="Sri Lanka">Sri Lanka</option>
-        <option value="Taiwan">Taiwan</option>
-    </select>
+                <div class="field">
+                    <label>Type de thé</label>
+                    <select th:field="*{typeThe}" required>
+                        <option value="">-- Choisir --</option>
+                        <option value="Vert">Vert</option>
+                        <option value="Noir">Noir</option>
+                        <option value="Oolong">Oolong</option>
+                        <option value="Blanc">Blanc</option>
+                        <option value="Pu-erh">Pu-erh</option>
+                    </select>
+                </div>
 
-    <br><br>
+                <div class="field">
+                    <label>Origine</label>
+                    <select th:field="*{origine}" required>
+                        <option value="">-- Choisir --</option>
+                        <option value="Chine">Chine</option>
+                        <option value="Japon">Japon</option>
+                        <option value="Inde">Inde</option>
+                        <option value="Sri Lanka">Sri Lanka</option>
+                        <option value="Taiwan">Taiwan</option>
+                    </select>
+                </div>
 
-    <label>Prix</label>
-    <input type="number" th:field="*{prix}" min="5" max="100" step="0.01" required>
-    <br><br>
+                <div class="field">
+                    <label>Nom</label>
+                    <input type="text" th:field="*{nom}" required maxlength="100">
+                </div>
 
-    <label>Quantité stock</label>
-    <input type="number" th:field="*{quantiteStock}" min="0" required>
-    <br><br>
+                <div class="field">
+                    <label>Prix (€)</label>
+                    <input type="number" th:field="*{prix}" min="5" max="100" step="0.01" required>
+                </div>
 
-    <label>Description</label><br>
-    <textarea th:field="*{description}" maxlength="500" rows="4" cols="40"></textarea>
-    <br><br>
+                <div class="field">
+                    <label>Quantité stock</label>
+                    <input type="number" th:field="*{quantiteStock}" min="0" required>
+                </div>
 
-    <label>Date réception</label>
-    <input type="datetime-local" th:field="*{dateReception}">
-    <br><br>
+                <div class="field">
+                    <label>Date réception</label>
+                    <input type="datetime-local" th:field="*{dateReception}">
+                </div>
 
-    <button type="submit">Enregistrer</button>
-</form>
+                <div class="field full">
+                    <label>Description</label>
+                    <textarea th:field="*{description}" maxlength="500"></textarea>
+                </div>
 
-<br>
-<a href="/">Retour à la liste</a>
+            </div>
 
+            <div class="actions">
+                <button class="btn primary" type="submit">Enregistrer</button>
+                <a class="btn" href="/">Retour</a>
+            </div>
+        </form>
+
+    </div>
+</div>
 </body>
-</html>

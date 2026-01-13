@@ -20,9 +20,10 @@ public class Produit {
     private int quantiteStock;
     private String description;
     private LocalDateTime dateReception;
+    private String typeThe;
 
     public Produit() {}
-    public Produit(Long id, String nom, String origine, float prix, int quantiteStock, String description, LocalDateTime dateReception) {
+    public Produit(Long id, String nom, String origine, float prix, int quantiteStock, String description, LocalDateTime dateReception, String typeThe) {
 
         this.id = id;
         this.nom = nom;
@@ -31,6 +32,7 @@ public class Produit {
         this.quantiteStock = quantiteStock;
         this.description = description;
         this.dateReception = dateReception;
+        this.typeThe = typeThe;
     }
 
     public Long getId() {
@@ -87,5 +89,13 @@ public class Produit {
 
     public void setDateReception(LocalDateTime dateReception) {
         this.dateReception = dateReception;
+    }
+
+    public String getTypeThe() {
+        return typeThe;
+    }
+
+    public void setTypeThe(String typeThe) {
+        this.typeThe = typeThe;
     }
 }

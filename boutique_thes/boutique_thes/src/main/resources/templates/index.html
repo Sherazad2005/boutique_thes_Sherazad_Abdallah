@@ -3,22 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Boutique de thés</title>
+    <script defer src="/js/confirm-delete.js"></script>
+    <style>
+        body{font-family:Arial,sans-serif;padding:20px;background:#f6f7fb}
+        .top{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:15px}
+        .box{background:#fff;border:1px solid #ddd;border-radius:10px;padding:12px}
+        table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #ddd;border-radius:10px;overflow:hidden}
+        th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+        th a{text-decoration:none;color:#111}
+        .actions a{margin-right:8px}
+        .pager{display:flex;gap:8px;align-items:center;margin-top:12px}
+        .btn{display:inline-block;padding:8px 10px;border:1px solid #ddd;border-radius:8px;background:#fff;text-decoration:none;color:#111}
+        .btn.primary{background:#2563eb;color:#fff;border-color:#2563eb}
+        input,select{padding:8px;border:1px solid #ddd;border-radius:8px}
+    </style>
 </head>
 <body>
 
 <h1>Liste des produits</h1>
 
-<p><a href="/nouveau">Ajouter un thé</a></p>
+<div class="top box">
+    <form method="get" action="/" style="display:flex;gap:10px;flex-wrap:wrap;align-items:end">
+        <div>
+            <label>Recherche nom</label><br>
+            <input type="text" name="q" th:value="${q}" placeholder="ex: Sencha">
+        </div>
 
-<table border="1" cellpadding="8">
+        <div>
+            <label>Filtre type</label><br>
+            <select name="type">
+                <option value="" th:selected="${type == ''}">Tous</option>
+                <option value="Vert" th:selected="${type == 'Vert'}">Vert</option>
+                <option value="Noir" th:selected="${type == 'Noir'}">Noir</option>
+                <option value="Oolong" th:selected="${type == 'Oolong'}">Oolong</option>
+                <option value="Blanc" th:selected="${type == 'Blanc'}">Blanc</option>
+                <option value="Pu-erh" th:selected="${type == 'Pu-erh'}">Pu-erh</option>
+            </select>
+        </div>
+
+        <!-- garder tri actuel -->
+        <input type="hidden" name="sort" th:value="${sort}">
+        <input type="hidden" name="dir" th:value="${dir}">
+        <button class="btn primary" type="submit">Rechercher</button>
+
+        <a class="btn" href="/nouveau">Ajouter un thé</a>
+
+        <a class="btn" th:href="@{/export(q=${q}, type=${type}, sort=${sort}, dir=${dir})}">Exporter CSV</a>
+    </form>
+</div>
+
+<table>
     <thead>
     <tr>
-        <th>Nom</th>
+        <th>
+            <a th:href="@{/(q=${q}, type=${type}, page=${produitsPage.number}, sort='nom', dir=${sort=='nom' and dir=='asc' ? 'desc' : 'asc'})}">
+                Nom
+            </a>
+        </th>
+        <th>Type</th>
         <th>Origine</th>
-        <th>Prix</th>
-        <th>Stock</th>
-        <th>Description</th>
-        <th>Date réception</th>
+        <th>
+            <a th:href="@{/(q=${q}, type=${type}, page=${produitsPage.number}, sort='prix', dir=${sort=='prix' and dir=='asc' ? 'desc' : 'asc'})}">
+                Prix
+            </a>
+        </th>
+        <th>
+            <a th:href="@{/(q=${q}, type=${type}, page=${produitsPage.number}, sort='quantiteStock', dir=${sort=='quantiteStock' and dir=='asc' ? 'desc' : 'asc'})}">
+                Quantité
+            </a>
+        </th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -26,20 +79,35 @@
     <tbody>
     <tr th:each="p : ${produits}">
         <td th:text="${p.nom}"></td>
+        <td th:text="${p.typeThe}"></td>
         <td th:text="${p.origine}"></td>
         <td th:text="${p.prix}"></td>
         <td th:text="${p.quantiteStock}"></td>
-        <td th:text="${p.description}"></td>
-        <td th:text="${p.dateReception}"></td>
-        <td>
+        <td class="actions">
             <a th:href="@{'/modifier/' + ${p.id}}">Modifier</a>
-            |
-            <a th:href="@{'/supprimer/' + ${p.id}}"
-               onclick="return confirm('Confirmer la suppression ?')">Supprimer</a>
+            <a class="delete-link" th:href="@{'/supprimer/' + ${p.id}}">Supprimer</a>
         </td>
     </tr>
     </tbody>
 </table>
 
+<div class="pager">
+    <a class="btn" th:if="${produitsPage.hasPrevious()}"
+       th:href="@{/(q=${q}, type=${type}, page=${produitsPage.number - 1}, sort=${sort}, dir=${dir})}">
+        ← Précédent
+    </a>
+
+    <span>
+        Page <strong th:text="${produitsPage.number + 1}"></strong>
+        / <strong th:text="${produitsPage.totalPages == 0 ? 1 : produitsPage.totalPages}"></strong>
+    </span>
+
+    <a class="btn" th:if="${produitsPage.hasNext()}"
+       th:href="@{/(q=${q}, type=${type}, page=${produitsPage.number + 1}, sort=${sort}, dir=${dir})}">
+        Suivant →
+    </a>
+</div>
+
 </body>
 </html>
+
