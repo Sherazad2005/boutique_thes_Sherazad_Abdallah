@@ -7,9 +7,10 @@ import java.util.List;
 public interface ProduitService {
 
     List<Produit> findAll();
-    Produit findById(int id);
-    void save(Produit produit);
-    void update(Produit produit);
-    void delete(int id);
-    
+
+    Produit save(Produit produit);
+
+    Produit getById(Long id);
+
+    void delete(Long id);
 }
